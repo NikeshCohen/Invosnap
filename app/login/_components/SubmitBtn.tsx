@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 
 import { Button } from "@/components/ui/button";
 
-interface iAppProps {
+type SubmitButtonProps = {
   text: string;
   variant?:
     | "default"
@@ -16,9 +16,9 @@ interface iAppProps {
     | "link"
     | null
     | undefined;
-}
+};
 
-export function SubmitButton({ text, variant }: iAppProps) {
+export function SubmitButton({ text, variant }: SubmitButtonProps) {
   const { pending } = useFormStatus();
   return (
     <>

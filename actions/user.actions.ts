@@ -14,6 +14,7 @@ export const getUser = async (userId: string) => {
     },
     select: {
       firstName: true,
+      email: true,
       lastName: true,
       address: true,
     },
@@ -22,6 +23,8 @@ export const getUser = async (userId: string) => {
   if (!data?.firstName || !data.lastName || !data.address) {
     redirect("/onboarding");
   }
+
+  return data;
 };
 
 export async function onboardUser(prevState: any, formData: FormData) {

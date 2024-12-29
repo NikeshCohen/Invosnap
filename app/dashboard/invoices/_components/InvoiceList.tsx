@@ -13,12 +13,11 @@ import {
 } from "@/components/ui/table";
 
 import { EmptyState } from "./EmptyState";
+import { InvoiceActions } from "./InvoiceActions";
 
 export async function InvoiceList() {
   const session = await requireUser();
   const data = await getInvoiceData(session.user?.id as string);
-
-  console.log(data);
 
   return (
     <>
@@ -60,7 +59,9 @@ export async function InvoiceList() {
                     dateStyle: "medium",
                   }).format(invoice.createdAt)}
                 </TableCell>
-                <TableCell className="text-right"></TableCell>
+                <TableCell className="text-right">
+                  <InvoiceActions status={invoice.status} id={invoice.id} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,11 +1,8 @@
-"use client";
+import React from "react";
 
-import { useActionState } from "react";
+import { redirect } from "next/navigation";
 
-import { onboardUser } from "@/actions/user.actions";
-import { onboardingSchema } from "@/utils/schemas";
-import { useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod";
+import { requireUser } from "@/hooks/requireUser";
 
 import {
   Card,
@@ -14,25 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
-import { SubmitButton } from "../login/_components/SubmitBtn";
+import OnboardingForm from "./_components/OnboardingForm";
 
-export default function Onboarding() {
-  const [lastResult, action] = useActionState(onboardUser, undefined);
-  const [form, fields] = useForm({
-    lastResult,
+async function page() {
+  const { user } = await requireUser();
 
-    onValidate({ formData }) {
-      return parseWithZod(formData, {
-        schema: onboardingSchema,
-      });
-    },
+  if (user?.firstName || user.lastName || user.address) {
+    redirect("/dashboard");
+  }
 
-    shouldValidate: "onBlur",
-    shouldRevalidate: "onInput",
-  });
   return (
     <div className="flex min-h-screen w-screen items-center justify-center">
       <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
@@ -46,53 +34,11 @@ export default function Onboarding() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form
-            className="grid gap-4"
-            action={action}
-            id={form.id}
-            onSubmit={form.onSubmit}
-            noValidate
-          >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-2">
-                <Label>First Name</Label>
-                <Input
-                  name={fields.firstName.name}
-                  key={fields.firstName.key}
-                  defaultValue={fields.firstName.initialValue}
-                  placeholder="John"
-                />
-                <p className="text-sm text-red-500">
-                  {fields.firstName.errors}
-                </p>
-              </div>
-              <div className="grid gap-2">
-                <Label>Last Name</Label>
-                <Input
-                  name={fields.lastName.name}
-                  key={fields.lastName.key}
-                  defaultValue={fields.lastName.initialValue}
-                  placeholder="Doe"
-                />
-                <p className="text-sm text-red-500">{fields.lastName.errors}</p>
-              </div>
-            </div>
-
-            <div className="grid gap-2">
-              <Label>Address</Label>
-              <Input
-                name={fields.address.name}
-                key={fields.address.key}
-                defaultValue={fields.address.initialValue}
-                placeholder="Chad street 123"
-              />
-              <p className="text-sm text-red-500">{fields.address.errors}</p>
-            </div>
-
-            <SubmitButton text="Finish onboarding" />
-          </form>
+          <OnboardingForm />
         </CardContent>
       </Card>
     </div>
   );
 }
+
+export default page;

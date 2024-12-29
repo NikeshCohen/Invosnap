@@ -51,3 +51,16 @@ export async function onboardUser(prevState: any, formData: FormData) {
 
   return redirect("/dashboard");
 }
+
+export const authorize = async (invoiceId: string, userId: string) => {
+  const data = await prisma.invoice.findUnique({
+    where: {
+      id: invoiceId,
+      userId: userId,
+    },
+  });
+
+  if (!data) {
+    return redirect("/dashboard/invoices");
+  }
+};

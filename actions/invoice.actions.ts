@@ -149,15 +149,16 @@ export async function editInvoice(prevState: any, formData: FormData) {
 
   const sender = {
     email: "hello@demomailtrap.com",
-    name: "Jan Marshal",
+    name: data.fromName,
   };
 
   emailClient.send({
     from: sender,
-    to: [{ email: "jan@alenix.de" }],
-    template_uuid: "9d04aa85-6896-48a8-94e9-b54354a48880",
+    to: [{ email: data.clientEmail }],
+    template_uuid: "8e5e7183-32a5-4114-95c7-5d462cebdbf6",
     template_variables: {
       clientName: submission.value.clientName,
+      senderEmail: submission.value.fromEmail,
       invoiceNumber: submission.value.invoiceNumber,
       invoiceDueDate: new Intl.DateTimeFormat("en-US", {
         dateStyle: "long",
@@ -169,7 +170,7 @@ export async function editInvoice(prevState: any, formData: FormData) {
       invoiceLink:
         process.env.NODE_ENV !== "production"
           ? `http://localhost:3000/api/invoice/${data.id}`
-          : `https://invoice-marshal.vercel.app/api/invoice/${data.id}`,
+          : `https://invosnap.xyz/api/invoice/${data.id}`,
     },
   });
 

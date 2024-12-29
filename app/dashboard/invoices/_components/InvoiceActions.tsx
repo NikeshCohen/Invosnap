@@ -10,6 +10,7 @@ import {
   Pencil,
   Trash,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +25,21 @@ interface iAppProps {
   status: string;
 }
 export function InvoiceActions({ id, status }: iAppProps) {
-  const handleSendReminder = () => {};
+  const handleSendReminder = () => {
+    toast.promise(
+      fetch(`/api/email/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      {
+        loading: "Sending reminder email...",
+        success: "Reminder email sent successfully",
+        error: "Failed to send reminder email",
+      },
+    );
+  };
 
   return (
     <DropdownMenu>

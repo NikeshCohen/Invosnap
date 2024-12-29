@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Toaster } from "@/components/ui/sonner";
 
 import { DashboardLinks } from "./_components/DashboardLinkts";
 
@@ -106,6 +107,8 @@ export default async function DashboardLayout({
           </main>
         </div>
       </div>
+
+      <Toaster richColors closeButton theme="light" />
     </>
   );
 }
